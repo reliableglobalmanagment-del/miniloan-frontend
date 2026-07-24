@@ -51,6 +51,7 @@ const Dashboard = () => {
     total: loans.length,
     approved: loans.filter(l => l.status === 'approved').length,
     pending: loans.filter(l => l.status === 'pending' || !l.status).length,
+    preApproved: loans.filter(l => l.status === 'pre-approved').length,
     rejected: loans.filter(l => l.status === 'rejected').length,
   };
 
@@ -104,6 +105,13 @@ const Dashboard = () => {
               <p style={styles.statLabel}>Aprobados</p>
             </div>
           </div>
+          <div style={{...styles.statCard, borderTop: '3px solid #6366f1'}}>
+            <div>
+              <span style={styles.statIcon}>⏳</span>
+              <h3 style={styles.statNumber}>{stats.preApproved}</h3>
+              <p style={styles.statLabel}>Pre-aprobados</p>
+            </div>
+          </div>
           <div style={{...styles.statCard, borderTop: '3px solid #f59e0b'}}>
             <div>
               <span style={styles.statIcon}>⏳</span>
@@ -133,11 +141,6 @@ const Dashboard = () => {
               <h4>Ver Préstamos</h4>
               <p>Revisa todas tus solicitudes</p>
             </div>
-            <div style={styles.actionItem} onClick={() => alert('Estadísticas disponibles próximamente')}>
-              <span style={styles.actionIcon}>📈</span>
-              <h4>Estadísticas</h4>
-              <p>Análisis de tu historial</p>
-            </div>
             {user.role === 'admin' && (
               <div style={styles.actionItem} onClick={() => navigate('/admin/loans')}>
                 <span style={styles.actionIcon}>🛠️</span>
@@ -145,11 +148,6 @@ const Dashboard = () => {
                 <p>Gestiona préstamos</p>
               </div>
             )}
-            <div style={styles.actionItem} onClick={() => alert('Perfil disponible próximamente')}>
-              <span style={styles.actionIcon}>👤</span>
-              <h4>Mi Perfil</h4>
-              <p>Configuración de cuenta</p>
-            </div>
           </div>
         </div>
 
@@ -181,13 +179,16 @@ const Dashboard = () => {
                 <div style={styles.loanRight}>
                   <span style={{...styles.badge, backgroundColor: 
                     loan.status === 'approved' ? '#d1fae5' : 
-                    loan.status === 'rejected' ? '#fce4e4' : '#fef3c7',
+                    loan.status === 'rejected' ? '#fce4e4' : 
+                    loan.status === 'pre-approved' ? '#e0e7ff' : '#fef3c7',
                     color: 
                     loan.status === 'approved' ? '#065f46' : 
-                    loan.status === 'rejected' ? '#991b1b' : '#92400e'
+                    loan.status === 'rejected' ? '#991b1b' : 
+                    loan.status === 'pre-approved' ? '#4338ca' : '#92400e'
                   }}>
                     {loan.status === 'approved' ? '✅ Aprobado' : 
-                     loan.status === 'rejected' ? '❌ Rechazado' : '⏳ Pendiente'}
+                     loan.status === 'rejected' ? '❌ Rechazado' : 
+                     loan.status === 'pre-approved' ? '⏳ Pre-aprobado' : '⏳ Pendiente'}
                   </span>
                   <span style={styles.loanDate}>
                     {loan.createdAt ? new Date(loan.createdAt).toLocaleDateString('es-MX') : 'Fecha no disponible'}
@@ -303,7 +304,7 @@ const styles = {
   welcomeBadgeIcon: { fontSize: '16px' },
   statsGrid: {
     display: 'grid',
-    gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
+    gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))',
     gap: '16px',
     marginBottom: '24px',
   },
@@ -401,4 +402,3 @@ const styles = {
 };
 
 export default Dashboard;
-

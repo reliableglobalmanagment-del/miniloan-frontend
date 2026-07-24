@@ -13,6 +13,7 @@ const LoanRequest = () => {
   const [submitting, setSubmitting] = useState(false);
   const navigate = useNavigate();
   const token = localStorage.getItem('token');
+  const user = JSON.parse(localStorage.getItem('user') || '{"name":"Usuario"}');
 
   useEffect(() => {
     if (!token) { 
@@ -56,7 +57,7 @@ const LoanRequest = () => {
       setAmount('');
       setTerm('');
       setPurpose('');
-      fetchLoans(); // Recargar la lista
+      fetchLoans();
     } catch (err) {
       setMessage('❌ Error al solicitar el préstamo: ' + (err.response?.data?.message || err.message));
       setMessageType('error');
@@ -71,13 +72,12 @@ const LoanRequest = () => {
     navigate('/login');
   };
 
-  const user = JSON.parse(localStorage.getItem('user') || '{"name":"Usuario"}');
-
   const getStatusBadge = (status) => {
     const configs = {
       'approved': { label: 'Aprobado', color: '#10b981', bg: '#d1fae5' },
       'rejected': { label: 'Rechazado', color: '#ef4444', bg: '#fce4e4' },
       'pending': { label: 'Pendiente', color: '#f59e0b', bg: '#fef3c7' },
+      'pre-approved': { label: 'Pre-aprobado', color: '#4338ca', bg: '#e0e7ff' },
     };
     const config = configs[status] || configs.pending;
     return <span style={{...styles.badge, color: config.color, backgroundColor: config.bg}}>{config.label}</span>;
