@@ -3,6 +3,7 @@ import Login from './Components/Login';
 import Register from './Components/Register';
 import LoanRequest from './Components/LoanRequest';
 import Dashboard from './Components/Dashboard';
+import AdminPanel from './Components/AdminPanel';
 
 function App() {
   return (
@@ -12,6 +13,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/request-loan" element={<LoanRequest />} />
+        <Route path="/admin/loans" element={<AdminPanel />} />
       </Routes>
     </Router>
   );

@@ -138,6 +138,13 @@ const Dashboard = () => {
               <h4>Estadísticas</h4>
               <p>Análisis de tu historial</p>
             </div>
+            {user.role === 'admin' && (
+              <div style={styles.actionItem} onClick={() => navigate('/admin/loans')}>
+                <span style={styles.actionIcon}>🛠️</span>
+                <h4>Panel Admin</h4>
+                <p>Gestiona préstamos</p>
+              </div>
+            )}
             <div style={styles.actionItem} onClick={() => alert('Perfil disponible próximamente')}>
               <span style={styles.actionIcon}>👤</span>
               <h4>Mi Perfil</h4>
