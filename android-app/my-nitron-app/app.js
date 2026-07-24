@@ -1,0 +1,14 @@
+const app = {
+  init: {
+    name: 'MiniLoan',
+    packageId: 'com.miniloan.app',
+    version: '1.0.0',
+    entry: 'index.html',
+    orientation: 'portrait',
+    statusBar: 'visible',
+    permissions: ['INTERNET', 'ACCESS_NETWORK_STATE'],
+    icon: 'icon.png'
+  }
+};
+
+module.exports = app;

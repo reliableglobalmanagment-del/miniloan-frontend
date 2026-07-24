@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">MiniLoan</string>
+    <string name="title_activity_main">MiniLoan</string>
+    <string name="package_name">com.miniloan.app</string>
+    <string name="custom_url_scheme">com.miniloan.app</string>
+</resources>

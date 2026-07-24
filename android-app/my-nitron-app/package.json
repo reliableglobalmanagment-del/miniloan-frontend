@@ -1,0 +1,13 @@
+{
+  "name": "my-nitron-app",
+  "version": "1.0.0",
+  "private": true,
+  "type": "commonjs",
+  "scripts": {
+    "dev": "nitron dev",
+    "build": "nitron build"
+  },
+  "dependencies": {
+    "nitron": "latest"
+  }
+}
