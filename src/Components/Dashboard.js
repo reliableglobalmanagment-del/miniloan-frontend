@@ -175,6 +175,9 @@ const Dashboard = () => {
                   <span style={styles.loanAmount}>${(loan.amount || 0).toLocaleString()}</span>
                   <span style={styles.loanTerm}>{loan.term || 0} meses</span>
                   <span style={styles.loanPurpose}>{loan.purpose || 'General'}</span>
+                  {loan.folio && (
+                    <span style={styles.folioBadge}>📋 Folio: {loan.folio}</span>
+                  )}
                 </div>
                 <div style={styles.loanRight}>
                   <span style={{...styles.badge, backgroundColor: 
@@ -193,6 +196,21 @@ const Dashboard = () => {
                   <span style={styles.loanDate}>
                     {loan.createdAt ? new Date(loan.createdAt).toLocaleDateString('es-MX') : 'Fecha no disponible'}
                   </span>
+                  {loan.status === 'pre-approved' && (
+                    <>
+                      <div style={styles.agentMessage}>
+                        📞 Un agente se comunicará contigo en las próximas 24 horas para finalizar tu préstamo.
+                      </div>
+                      <a 
+                        href={`https://wa.me/528148762925?text=Hola%2C%20tengo%20un%20pr%C3%A9stamo%20pre-aprobado%20con%20folio%3A%20${loan.folio}%20por%20%24${(loan.amount || 0).toLocaleString()}%20a%20${loan.term}%20meses.%20Mi%20nombre%20es%20${user.name}.`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        style={styles.whatsappBtn}
+                      >
+                        💬 Contactar agente
+                      </a>
+                    </>
+                  )}
                 </div>
               </div>
             ))
@@ -382,23 +400,53 @@ const styles = {
   },
   loanItem: {
     display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: 'column',
     padding: '14px 16px',
     borderRadius: '10px',
     backgroundColor: '#f8fafc',
     border: '1px solid #e2e8f0',
     marginBottom: '8px',
-    flexWrap: 'wrap',
     gap: '8px',
   },
   loanLeft: { display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap' },
   loanAmount: { fontSize: '16px', fontWeight: 700, color: '#0f172a' },
   loanTerm: { fontSize: '13px', color: '#64748b', backgroundColor: '#e2e8f0', padding: '2px 10px', borderRadius: '12px' },
   loanPurpose: { fontSize: '13px', color: '#94a3b8', textTransform: 'capitalize' },
-  loanRight: { display: 'flex', alignItems: 'center', gap: '12px' },
+  folioBadge: {
+    fontSize: '12px',
+    color: '#4338ca',
+    backgroundColor: '#e0e7ff',
+    padding: '2px 10px',
+    borderRadius: '12px',
+    fontWeight: 600,
+  },
+  loanRight: { display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap' },
   badge: { padding: '4px 12px', borderRadius: '12px', fontSize: '12px', fontWeight: 600 },
   loanDate: { fontSize: '12px', color: '#94a3b8' },
+  agentMessage: {
+    width: '100%',
+    marginTop: '8px',
+    padding: '10px 14px',
+    backgroundColor: '#e0e7ff',
+    borderRadius: '8px',
+    color: '#4338ca',
+    fontSize: '13px',
+    fontWeight: 500,
+    textAlign: 'center',
+  },
+  whatsappBtn: {
+    padding: '6px 14px',
+    backgroundColor: '#25D366',
+    color: '#fff',
+    borderRadius: '20px',
+    fontSize: '12px',
+    fontWeight: 600,
+    textDecoration: 'none',
+    display: 'inline-block',
+    transition: 'all 0.2s',
+    marginLeft: '0px',
+    marginTop: '4px',
+  },
 };
 
 export default Dashboard;

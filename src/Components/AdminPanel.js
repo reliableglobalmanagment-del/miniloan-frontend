@@ -83,7 +83,7 @@ const AdminPanel = () => {
       'approved': { label: 'Aprobado', color: '#10b981', bg: '#d1fae5' },
       'rejected': { label: 'Rechazado', color: '#ef4444', bg: '#fce4e4' },
       'pending': { label: 'Pendiente', color: '#f59e0b', bg: '#fef3c7' },
-      'pre-approved': { label: 'Pre-aprobado', color: '#6366f1', bg: '#e0e7ff' },
+      'pre-approved': { label: 'Pre-aprobado', color: '#4338ca', bg: '#e0e7ff' },
     };
     const config = configs[status] || configs.pending;
     return <span style={{...styles.badge, color: config.color, backgroundColor: config.bg}}>{config.label}</span>;
@@ -128,6 +128,8 @@ const AdminPanel = () => {
                     <th>Usuario</th>
                     <th>Email</th>
                     <th>Teléfono</th>
+                    <th>ID Usuario</th>
+                    <th>Folio</th>
                     <th>Monto</th>
                     <th>Plazo</th>
                     <th>Propósito</th>
@@ -141,6 +143,8 @@ const AdminPanel = () => {
                       <td>{loan.userId?.name || 'N/A'}</td>
                       <td>{loan.userId?.email || 'N/A'}</td>
                       <td>{loan.userId?.phone || 'N/A'}</td>
+                      <td style={{fontSize: '11px', color: '#64748b'}}>{loan.userId?._id || 'N/A'}</td>
+                      <td style={{fontWeight: 'bold', color: '#4338ca'}}>{loan.folio || '-'}</td>
                       <td>${loan.amount.toLocaleString()}</td>
                       <td>{loan.term} meses</td>
                       <td>{loan.purpose}</td>
@@ -148,51 +152,21 @@ const AdminPanel = () => {
                       <td>
                         {loan.status === 'pending' && (
                           <>
-                            <button 
-                              onClick={() => updateLoanStatus(loan._id, 'pre-approved')}
-                              style={styles.preApproveBtn}
-                            >
-                              ⏳ Pre-aprobar
-                            </button>
-                            <button 
-                              onClick={() => updateLoanStatus(loan._id, 'approved')}
-                              style={styles.approveBtn}
-                            >
-                              ✅ Aprobar
-                            </button>
-                            <button 
-                              onClick={() => updateLoanStatus(loan._id, 'rejected')}
-                              style={styles.rejectBtn}
-                            >
-                              ❌ Rechazar
-                            </button>
+                            <button onClick={() => updateLoanStatus(loan._id, 'pre-approved')} style={styles.preApproveBtn}>⏳ Pre-aprobar</button>
+                            <button onClick={() => updateLoanStatus(loan._id, 'approved')} style={styles.approveBtn}>✅ Aprobar</button>
+                            <button onClick={() => updateLoanStatus(loan._id, 'rejected')} style={styles.rejectBtn}>❌ Rechazar</button>
                           </>
                         )}
                         {loan.status === 'pre-approved' && (
                           <>
-                            <button 
-                              onClick={() => updateLoanStatus(loan._id, 'approved')}
-                              style={styles.approveBtn}
-                            >
-                              ✅ Aprobar
-                            </button>
-                            <button 
-                              onClick={() => updateLoanStatus(loan._id, 'rejected')}
-                              style={styles.rejectBtn}
-                            >
-                              ❌ Rechazar
-                            </button>
+                            <button onClick={() => updateLoanStatus(loan._id, 'approved')} style={styles.approveBtn}>✅ Aprobar</button>
+                            <button onClick={() => updateLoanStatus(loan._id, 'rejected')} style={styles.rejectBtn}>❌ Rechazar</button>
                           </>
                         )}
                         {loan.status !== 'pending' && loan.status !== 'pre-approved' && (
                           <span style={styles.noAction}>✓ Procesado</span>
                         )}
-                        <button 
-                          onClick={() => deleteLoan(loan._id)}
-                          style={styles.deleteBtn}
-                        >
-                          🗑️ Eliminar
-                        </button>
+                        <button onClick={() => deleteLoan(loan._id)} style={styles.deleteBtn}>🗑️ Eliminar</button>
                       </td>
                     </tr>
                   ))}
