@@ -28,7 +28,7 @@ const Dashboard = () => {
 
   const fetchData = async () => {
     try {
-      const response = await axios.get('http://192.168.132.155:5000/api/loans', {
+      const response = await axios.get('https://miniloan-backend.onrender.com/api/loans', {
         headers: { Authorization: `Bearer ${token}` }
       });
       // Solo usar los préstamos reales del usuario, sin datos de demostración

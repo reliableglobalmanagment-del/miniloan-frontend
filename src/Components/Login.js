@@ -7,7 +7,7 @@ const Login = () => {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  const [biometricAvailable] = useState(true);
+  const [biometricAvailable] = useState(false);
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
