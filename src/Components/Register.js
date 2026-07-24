@@ -5,6 +5,7 @@ import axios from 'axios';
 const Register = () => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
+  const [phone, setPhone] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
@@ -33,21 +34,17 @@ const Register = () => {
       const response = await axios.post('https://miniloan-backend.onrender.com/api/users/register', {
         name,
         email,
+        phone,
         password
       });
       
       setSuccess('✅ ¡Cuenta creada exitosamente! Redirigiendo...');
-      
-      // Guardar datos del usuario para login automático
-      localStorage.setItem('user', JSON.stringify({ name, email }));
-      
-      // Limpiar formulario
       setName('');
       setEmail('');
+      setPhone('');
       setPassword('');
       setConfirmPassword('');
       
-      // Redirigir al login después de 2 segundos
       setTimeout(() => {
         navigate('/login');
       }, 2000);
@@ -103,6 +100,21 @@ const Register = () => {
                 placeholder="ejemplo@correo.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
+                style={styles.input}
+                required
+              />
+            </div>
+          </div>
+
+          <div style={styles.formGroup}>
+            <label style={styles.label}>Teléfono</label>
+            <div style={styles.inputWrapper}>
+              <span style={styles.inputIcon}>📱</span>
+              <input
+                type="tel"
+                placeholder="+52 1234567890"
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
                 style={styles.input}
                 required
               />

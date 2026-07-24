@@ -44,10 +44,29 @@ const AdminPanel = () => {
       setLoans(loans.map(loan => 
         loan._id === loanId ? { ...loan, status: newStatus } : loan
       ));
-      setMessage(`✅ Préstamo ${newStatus === 'approved' ? 'aprobado' : 'rechazado'} correctamente.`);
+      const statusMap = {
+        'approved': 'aprobado',
+        'rejected': 'rechazado',
+        'pre-approved': 'pre-aprobado'
+      };
+      setMessage(`✅ Préstamo ${statusMap[newStatus] || newStatus} correctamente.`);
     } catch (error) {
       console.error('Error updating loan:', error);
       setMessage('❌ Error al actualizar el préstamo.');
+    }
+  };
+
+  const deleteLoan = async (loanId) => {
+    if (!window.confirm('¿Estás seguro de que quieres eliminar este préstamo?')) return;
+    try {
+      await axios.delete(`https://miniloan-backend.onrender.com/api/loans/${loanId}`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      setLoans(loans.filter(loan => loan._id !== loanId));
+      setMessage('✅ Préstamo eliminado correctamente.');
+    } catch (error) {
+      console.error('Error deleting loan:', error);
+      setMessage('❌ Error al eliminar el préstamo.');
     }
   };
 
@@ -64,6 +83,7 @@ const AdminPanel = () => {
       'approved': { label: 'Aprobado', color: '#10b981', bg: '#d1fae5' },
       'rejected': { label: 'Rechazado', color: '#ef4444', bg: '#fce4e4' },
       'pending': { label: 'Pendiente', color: '#f59e0b', bg: '#fef3c7' },
+      'pre-approved': { label: 'Pre-aprobado', color: '#6366f1', bg: '#e0e7ff' },
     };
     const config = configs[status] || configs.pending;
     return <span style={{...styles.badge, color: config.color, backgroundColor: config.bg}}>{config.label}</span>;
@@ -98,7 +118,7 @@ const AdminPanel = () => {
           ) : loans.length === 0 ? (
             <div style={styles.empty}>
               <span style={styles.emptyIcon}>📭</span>
-              <p>No hay solicitudes de préstamos pendientes.</p>
+              <p>No hay solicitudes de préstamos.</p>
             </div>
           ) : (
             <div style={styles.tableWrapper}>
@@ -107,6 +127,7 @@ const AdminPanel = () => {
                   <tr>
                     <th>Usuario</th>
                     <th>Email</th>
+                    <th>Teléfono</th>
                     <th>Monto</th>
                     <th>Plazo</th>
                     <th>Propósito</th>
@@ -119,12 +140,35 @@ const AdminPanel = () => {
                     <tr key={loan._id}>
                       <td>{loan.userId?.name || 'N/A'}</td>
                       <td>{loan.userId?.email || 'N/A'}</td>
+                      <td>{loan.userId?.phone || 'N/A'}</td>
                       <td>${loan.amount.toLocaleString()}</td>
                       <td>{loan.term} meses</td>
                       <td>{loan.purpose}</td>
                       <td>{getStatusBadge(loan.status)}</td>
                       <td>
                         {loan.status === 'pending' && (
+                          <>
+                            <button 
+                              onClick={() => updateLoanStatus(loan._id, 'pre-approved')}
+                              style={styles.preApproveBtn}
+                            >
+                              ⏳ Pre-aprobar
+                            </button>
+                            <button 
+                              onClick={() => updateLoanStatus(loan._id, 'approved')}
+                              style={styles.approveBtn}
+                            >
+                              ✅ Aprobar
+                            </button>
+                            <button 
+                              onClick={() => updateLoanStatus(loan._id, 'rejected')}
+                              style={styles.rejectBtn}
+                            >
+                              ❌ Rechazar
+                            </button>
+                          </>
+                        )}
+                        {loan.status === 'pre-approved' && (
                           <>
                             <button 
                               onClick={() => updateLoanStatus(loan._id, 'approved')}
@@ -140,9 +184,15 @@ const AdminPanel = () => {
                             </button>
                           </>
                         )}
-                        {loan.status !== 'pending' && (
+                        {loan.status !== 'pending' && loan.status !== 'pre-approved' && (
                           <span style={styles.noAction}>✓ Procesado</span>
                         )}
+                        <button 
+                          onClick={() => deleteLoan(loan._id)}
+                          style={styles.deleteBtn}
+                        >
+                          🗑️ Eliminar
+                        </button>
                       </td>
                     </tr>
                   ))}
@@ -248,9 +298,29 @@ const styles = {
     fontSize: '12px',
     marginRight: '4px',
   },
+  preApproveBtn: {
+    padding: '6px 12px',
+    backgroundColor: '#6366f1',
+    color: '#fff',
+    border: 'none',
+    borderRadius: '6px',
+    cursor: 'pointer',
+    fontSize: '12px',
+    marginRight: '4px',
+  },
   rejectBtn: {
     padding: '6px 12px',
     backgroundColor: '#ef4444',
+    color: '#fff',
+    border: 'none',
+    borderRadius: '6px',
+    cursor: 'pointer',
+    fontSize: '12px',
+    marginRight: '4px',
+  },
+  deleteBtn: {
+    padding: '6px 12px',
+    backgroundColor: '#6b7280',
     color: '#fff',
     border: 'none',
     borderRadius: '6px',
