@@ -7,7 +7,6 @@ const Login = () => {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  const [biometricAvailable] = useState(false);
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -23,7 +22,17 @@ const Login = () => {
       
       if (response.data.token) {
         localStorage.setItem('token', response.data.token);
-        localStorage.setItem('user', JSON.stringify({ email, name: 'Usuario' }));
+        
+        // Obtener el perfil del usuario
+        try {
+          const userResponse = await axios.get('https://miniloan-backend.onrender.com/api/users/me', {
+            headers: { Authorization: `Bearer ${response.data.token}` }
+          });
+          localStorage.setItem('user', JSON.stringify(userResponse.data));
+        } catch (err) {
+          localStorage.setItem('user', JSON.stringify({ name: email.split('@')[0], email }));
+        }
+        
         navigate('/');
       }
     } catch (err) {
@@ -31,16 +40,6 @@ const Login = () => {
     } finally {
       setLoading(false);
     }
-  };
-
-  const handleBiometricLogin = () => {
-    setLoading(true);
-    setTimeout(() => {
-      localStorage.setItem('token', 'demo-token-biometric');
-      localStorage.setItem('user', JSON.stringify({ email: 'usuario@biometrico.com', name: 'Usuario Biométrico' }));
-      navigate('/');
-      setLoading(false);
-    }, 1500);
   };
 
   return (
@@ -96,21 +95,6 @@ const Login = () => {
             {loading ? 'Iniciando...' : 'Iniciar Sesión'}
           </button>
         </form>
-
-        {biometricAvailable && (
-          <div style={styles.divider}>
-            <span style={styles.dividerLine}></span>
-            <span style={styles.dividerText}>o</span>
-            <span style={styles.dividerLine}></span>
-          </div>
-        )}
-
-        {biometricAvailable && (
-          <button onClick={handleBiometricLogin} style={styles.biometricButton} disabled={loading}>
-            <span style={styles.biometricIcon}>👆</span>
-            {loading ? 'Verificando...' : 'Acceso con Huella Digital'}
-          </button>
-        )}
 
         <div style={styles.footer}>
           <p style={styles.footerText}>
@@ -269,41 +253,6 @@ const styles = {
     transition: 'all 0.3s',
     marginTop: '6px',
     boxShadow: '0 4px 14px rgba(99,102,241,0.4)',
-  },
-  divider: {
-    display: 'flex',
-    alignItems: 'center',
-    gap: '16px',
-    margin: '16px 0',
-  },
-  dividerLine: {
-    flex: 1,
-    height: '1px',
-    backgroundColor: 'rgba(255,255,255,0.08)',
-  },
-  dividerText: {
-    fontSize: '12px',
-    color: 'rgba(255,255,255,0.3)',
-    textTransform: 'uppercase',
-  },
-  biometricButton: {
-    width: '100%',
-    padding: '12px',
-    backgroundColor: 'rgba(255,255,255,0.05)',
-    color: '#ffffff',
-    border: '1px solid rgba(255,255,255,0.08)',
-    borderRadius: '10px',
-    fontSize: '14px',
-    fontWeight: 500,
-    cursor: 'pointer',
-    transition: 'all 0.3s',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: '10px',
-  },
-  biometricIcon: {
-    fontSize: '18px',
   },
   footer: {
     marginTop: '24px',

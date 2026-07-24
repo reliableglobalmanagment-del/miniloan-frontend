@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
 
 const Dashboard = () => {
@@ -32,11 +32,9 @@ const Dashboard = () => {
       const response = await axios.get('https://miniloan-backend.onrender.com/api/loans', {
         headers: { Authorization: `Bearer ${token}` }
       });
-      // Solo usar los préstamos reales del usuario, sin datos de demostración
       setLoans(response.data || []);
     } catch (error) {
       console.error('Error fetching loans:', error);
-      // En caso de error, mostrar lista vacía, no datos de demostración
       setLoans([]);
     } finally {
       setLoading(false);
@@ -314,14 +312,6 @@ const styles = {
   statIcon: { fontSize: '24px', display: 'block', marginBottom: '4px' },
   statNumber: { fontSize: '24px', fontWeight: 700, margin: 0, color: '#0f172a' },
   statLabel: { fontSize: '13px', color: '#64748b', margin: 0 },
-  statChange: {
-    fontSize: '12px',
-    fontWeight: 600,
-    color: '#10b981',
-    backgroundColor: '#d1fae5',
-    padding: '2px 10px',
-    borderRadius: '12px',
-  },
   actionsCard: {
     backgroundColor: '#ffffff',
     borderRadius: '16px',
@@ -404,3 +394,4 @@ const styles = {
 };
 
 export default Dashboard;
+
