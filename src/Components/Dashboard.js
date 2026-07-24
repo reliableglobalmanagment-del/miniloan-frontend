@@ -4,6 +4,7 @@ import axios from 'axios';
 
 const Dashboard = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const token = localStorage.getItem('token');
   const [loans, setLoans] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -24,7 +25,7 @@ const Dashboard = () => {
       return;
     }
     fetchData();
-  }, []);
+  }, [location.key]);
 
   const fetchData = async () => {
     try {
