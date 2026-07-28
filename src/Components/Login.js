@@ -54,7 +54,7 @@ const Login = () => {
           <div style={styles.logoWrapper}>
             <span style={styles.logoIcon}>🏦</span>
           </div>
-          <h1 style={styles.title}>MiniLoan</h1>
+          <h1 style={styles.title}>Vallarta Préstamos</h1>
           <p style={styles.subtitle}>Plataforma Premium de Préstamos</p>
         </div>
 

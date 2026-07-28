@@ -89,7 +89,7 @@ const LoanRequest = () => {
         <div style={styles.headerContent}>
           <div style={styles.headerLeft}>
             <span style={styles.logo}>🏦</span>
-            <span style={styles.brand}>MiniLoan</span>
+            <span style={styles.brand}>Vallarta Préstamos</span>
             <span style={styles.badge}>PRO</span>
           </div>
           <div style={styles.headerRight}>
