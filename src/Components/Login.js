@@ -23,7 +23,6 @@ const Login = () => {
       if (response.data.token) {
         localStorage.setItem('token', response.data.token);
         
-        // Obtener el perfil del usuario
         try {
           const userResponse = await axios.get('https://miniloan-backend.onrender.com/api/users/me', {
             headers: { Authorization: `Bearer ${response.data.token}` }
@@ -95,6 +94,25 @@ const Login = () => {
             {loading ? 'Iniciando...' : 'Iniciar Sesión'}
           </button>
         </form>
+
+        {/* SECCIÓN DE DESCARGA DEL APK */}
+        <div style={styles.downloadSection}>
+          <div style={styles.divider}>
+            <span style={styles.dividerLine}></span>
+            <span style={styles.dividerText}>📱 Descarga la app</span>
+            <span style={styles.dividerLine}></span>
+          </div>
+          <a 
+            href="/downloads/VallartaPrestamos.apk" 
+            download
+            style={styles.downloadButton}
+          >
+            ⬇️ Descargar APK (Android)
+          </a>
+          <p style={styles.downloadNote}>
+            Versión 1.0 • 4.6 MB • Instalación segura
+          </p>
+        </div>
 
         <div style={styles.footer}>
           <p style={styles.footerText}>
@@ -253,6 +271,48 @@ const styles = {
     transition: 'all 0.3s',
     marginTop: '6px',
     boxShadow: '0 4px 14px rgba(99,102,241,0.4)',
+  },
+  downloadSection: {
+    marginTop: '16px',
+  },
+  divider: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: '12px',
+    margin: '16px 0 12px 0',
+  },
+  dividerLine: {
+    flex: 1,
+    height: '1px',
+    backgroundColor: 'rgba(255,255,255,0.08)',
+  },
+  dividerText: {
+    fontSize: '12px',
+    color: 'rgba(255,255,255,0.3)',
+    textTransform: 'uppercase',
+    letterSpacing: '0.5px',
+  },
+  downloadButton: {
+    display: 'block',
+    textAlign: 'center',
+    padding: '14px 24px',
+    backgroundColor: 'rgba(255,255,255,0.06)',
+    color: '#ffffff',
+    border: '1px solid rgba(255,255,255,0.12)',
+    borderRadius: '12px',
+    fontSize: '15px',
+    fontWeight: 600,
+    textDecoration: 'none',
+    transition: 'all 0.3s',
+    backdropFilter: 'blur(4px)',
+    width: '100%',
+    boxSizing: 'border-box',
+  },
+  downloadNote: {
+    fontSize: '12px',
+    color: 'rgba(255,255,255,0.25)',
+    textAlign: 'center',
+    marginTop: '8px',
   },
   footer: {
     marginTop: '24px',
